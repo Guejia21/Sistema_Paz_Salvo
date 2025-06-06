@@ -1,23 +1,27 @@
-#mensajesGrupales {
-  border: 2px solid black; /* Línea continua negra de 2px */
-  padding: 10px;            /* Espacio interno */
-  height: 100px;            /* Altura fija, ajustable */
-  overflow-y: auto;         /* Scroll vertical si hay muchos mensajes */
-  background-color: #f9f9f9; /* Fondo claro opcional */
+body{
+  padding: 20px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  background-color: #0D4185;
 }
-
-#mensajesPrivados {
-  border: 2px solid black;
-  padding: 10px;
-  height: 100px;
-  overflow-y: auto;
-  background-color: #f9f9f9;
+#antorcha {
+    position: fixed;
+    z-index: -1;
+    background: url("https://simca.unicauca.edu.co/simca/resources/images/antorcha.png") no-repeat;
+    height: 592px;
+    right: 15%;
+    top: 0;
+    width: 251px;
 }
-
-#usuariosConectados {
-  border: 2px solid rgb(218, 172, 20);
-  padding: 10px;
-  height: 50px;
-  overflow-y: auto;
-  background-color: #faebeb;
+#bandera {
+    background: url("https://simca.unicauca.edu.co/simca/resources/images/bandera.png") no-repeat;
+    width: 345px;
+    height: 130px;
+    position: fixed;
+    z-index: -1;
+    left: 0;
+    bottom: 0;
+}
+ul li{
+  list-style: none;  
+  margin-right: 10px;
 }
