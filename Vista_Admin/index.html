@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat con WebSocket</title>
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+  <script src="funciones.js" defer></script>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+  <h2>Chat WebSocket</h2>
+  <input type="text" id="nicknameOrigen" placeholder="nickname de origen">
+  <button id="btnConectar" onclick="conectar()">Conectar</button>
+  <button id="btnDesconectar" onclick="desconectar()" disabled>Desconectar</button>
+  <br><br>
+  <div id="inputGrupal">   
+    <h3>Enviar mensaje a chat grupal:</h3> 
+    <input type="text" id="message" placeholder="Escribe un mensaje" disabled>
+    <button id="btnEnviarGrupal" onclick="enviarMensajeGrupalServidor()" disabled>Enviar mensaje</button>
+  </div>
+  <br>
+  <div id="inputPrivado">    
+    <h3>Enviar mensaje a chat privado:</h3> 
+    <input type="text" id="nicknameDestino" placeholder="nickname de destino" disabled>
+    <input type="text" id="messagePrivado" placeholder="Escribe un mensaje" disabled>
+    <button id="btnEnviarPrivado" onclick="enviarMensajePrivadoServidor()" disabled>Enviar mensaje</button>
+  </div>
+
+  <div id="chat">
+    <h3>Usuarios conectados</h3>
+    <div id="usuariosConectados">
+      <!-- Los mensajes se mostrarán aquí -->
+    </div>
+    <h3>Mensajes recibidos del chat grupal:</h3>
+    <div id="mensajesGrupales">
+      <!-- Los mensajes se mostrarán aquí -->
+    </div>
+    <h3>Mensajes recibidos del chat privado:</h3>
+    <div id="mensajesPrivados">
+      <!-- Los mensajes se mostrarán aquí -->
+    </div>
+  </div>  
+</body>
+</html>
+
+
