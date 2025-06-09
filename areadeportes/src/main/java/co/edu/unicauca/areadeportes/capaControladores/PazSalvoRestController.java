@@ -27,6 +27,7 @@ public class PazSalvoRestController {
 
     @DeleteMapping("/pazsalvo/{id}")
     public String eliminarPendientes(@PathVariable("id") int idEstudiante) {
+        System.out.println("Eliminando pendientes para el estudiante con ID: " + idEstudiante);
         boolean eliminado = solicitudPazSalvo.eliminarPendientes(idEstudiante);
         return eliminado ? "Pendientes eliminados correctamente." : "No hay pendientes por eliminar.";
     }

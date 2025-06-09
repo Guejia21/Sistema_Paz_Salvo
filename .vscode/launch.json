@@ -9,6 +9,16 @@
             "projectName": "areadeportes",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-AreafinancieraApplication<areafinanciera>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "co.edu.unicauca.areafinanciera.AreafinancieraApplication",
+            "projectName": "areafinanciera",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }
