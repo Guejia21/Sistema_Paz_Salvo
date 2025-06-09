@@ -1,0 +1,148 @@
+{
+    "info": {
+        "_postman_id": "1f74f096-7bbf-4fe1-954b-e787186a58fd",
+        "name": "parcial",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "description": ""
+    },
+    "item": [
+        {
+            "name": "consultarDeporte",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "localhost:5001/api/deporte/pazsalvo",
+                    "path": [
+                        "api",
+                        "deporte",
+                        "pazsalvo"
+                    ],
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "5001"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\r\n  \"idEstudiante\": 1001\r\n}"
+                }
+            }
+        },
+        {
+            "name": "eliminarDeporte",
+            "request": {
+                "method": "DELETE",
+                "url": {
+                    "raw": "localhost:5001/api/deporte/pazsalvo/1001",
+                    "path": [
+                        "api",
+                        "deporte",
+                        "pazsalvo",
+                        "1001"
+                    ],
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "5001"
+                }
+            }
+        },
+        {
+            "name": "consultarFinanciera",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "localhost:5002/api/financiera/pazsalvo",
+                    "path": [
+                        "api",
+                        "financiera",
+                        "pazsalvo"
+                    ],
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "5002"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"idEstudiante\": 1001\n}"
+                }
+            }
+        },
+        {
+            "name": "eliminarFinanciera",
+            "request": {
+                "method": "DELETE",
+                "url": {
+                    "raw": "localhost:5002/api/financiera/pazsalvo/1001",
+                    "path": [
+                        "api",
+                        "financiera",
+                        "pazsalvo",
+                        "1001"
+                    ],
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "5002"
+                }
+            }
+        },
+        {
+            "name": "consultarLaboratorio",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "localhost:5003/api/laboratorio/pazsalvo",
+                    "path": [
+                        "api",
+                        "laboratorio",
+                        "pazsalvo"
+                    ],
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "5003"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\r\n  \"idEstudiante\": 1001\r\n}"
+                }
+            }
+        },
+        {
+            "name": "eliminarLaboratorio",
+            "request": {
+                "method": "DELETE",
+                "url": {
+                    "raw": "localhost:5003/api/laboratorio/pazsalvo/1001",
+                    "path": [
+                        "api",
+                        "laboratorio",
+                        "pazsalvo",
+                        "1001"
+                    ],
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "5003"
+                }
+            }
+        }
+    ]
+}

@@ -1,6 +1,8 @@
 package co.edu.unicauca.areadeportes.capaControladores;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,10 +21,10 @@ public class PazSalvoRestController {
     private SolicitudPazSalvoInt solicitudPazSalvo;
 
     @PostMapping("/pazsalvo")
-    public RespuestaPazSalvoDTO consultarPazYSalvo(@RequestBody PeticionPazSalvoDTO peticion) {
+    public ResponseEntity<RespuestaPazSalvoDTO> consultarPazYSalvo(@RequestBody PeticionPazSalvoDTO peticion) {
         System.out.println("Consultando paz y salvo para el estudiante con ID: " + peticion.getIdEstudiante());
         RespuestaPazSalvoDTO respuesta = solicitudPazSalvo.consultarPazYSalvo(peticion);
-        return respuesta;
+        return new ResponseEntity<>(respuesta, HttpStatus.OK);
     }
 
     @DeleteMapping("/pazsalvo/{id}")
