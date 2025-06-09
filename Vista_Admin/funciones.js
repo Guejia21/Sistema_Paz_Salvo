@@ -83,14 +83,13 @@ function conectar() {
   if(!validarCampos()) { return; }
   try {
     const socket = new SockJS('http://localhost:5000/ws');
-    clienteAdmin = Stomp.over(socket)
-    const nombre = document.getElementById('nombre').value
-    const areaSeleccionada = document.querySelector('input[name="area"]:checked');
+    clienteAdmin = Stomp.over(socket);
+    const nombre = document.getElementById('nombre').value;
+    const areaSeleccionada = document.querySelector('input[name="area"]:checked').value;
     clienteAdmin.connect(
-      { nombre: nombre },
-      { area: areaSeleccionada },
+      { nombre: nombre, area: areaSeleccionada },
       suscripcionAChat,
-      function(error) { // <-- Callback de error
+      function(error) {
         mostrarMensajeError(error);
         setConectado(false);
       }
@@ -100,6 +99,7 @@ function conectar() {
     return;
   }
 }
+
 function desconectar() {
   if (clienteAdmin !== null) {
     clienteAdmin.disconnect(() => {          
@@ -109,18 +109,22 @@ function desconectar() {
   }
 }
 function suscripcionAChat(frame) {     
+  setConectado(true); // <-- Movido al inicio de la función
   // Suscripción al canal de notificaciones generales
   clienteAdmin.subscribe('/notificaciones/generales', recibirNotificacion);
-  const areaSeleccionada = document.querySelector('input[name="area"]:checked');
+  const areaSeleccionada = document.querySelector('in1put[name="area"]:checked').value;
   // Suscripción al canal personalizado del administrador
   clienteAdmin.subscribe(`/notificaciones/${areaSeleccionada}`, recibirNotificacion);
-  setConectado(true);
 }
 function recibirNotificacion(message) {
   const data = JSON.parse(message.body);
-  const referenciaDivNotificaciones = document.getElementById('listaNotifiaciones');
+  console.log("Datos recibidos por WebSocket:", data); 
+  const referenciaDivNotificaciones = document.getElementById('listaNotificaciones');
+  if (!referenciaDivNotificaciones) {
+    console.error("Elemento 'listaNotificaciones' no encontrado en el DOM.");
+    return;
+  }
   const nuevoParrafo = document.createElement('li');
   nuevoParrafo.textContent = data.contenido;
   referenciaDivNotificaciones.appendChild(nuevoParrafo);
 }
-
