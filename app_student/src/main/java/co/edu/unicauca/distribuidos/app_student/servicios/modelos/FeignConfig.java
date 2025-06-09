@@ -11,6 +11,6 @@ import feign.Request;
 public class FeignConfig {
     @Bean
     public Request.Options requestOptions() {
-        return new Request.Options(Duration.ofSeconds(4), Duration.ofSeconds(4), false);
+        return new Request.Options(Duration.ofSeconds(5), Duration.ofSeconds(5), false);
     }
 }
