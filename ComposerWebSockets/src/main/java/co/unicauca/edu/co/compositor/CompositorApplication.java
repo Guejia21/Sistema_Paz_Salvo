@@ -3,6 +3,7 @@ package co.unicauca.edu.co.compositor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+
 @SpringBootApplication
 public class CompositorApplication {
 

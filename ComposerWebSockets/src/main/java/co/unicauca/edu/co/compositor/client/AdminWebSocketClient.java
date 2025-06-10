@@ -1,5 +1,6 @@
 package co.unicauca.edu.co.compositor.client;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -8,6 +9,9 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.messaging.simp.stomp.StompSessionHandler;
 
 import java.util.concurrent.ExecutionException;
@@ -17,10 +21,18 @@ public class AdminWebSocketClient {
 
     private static final String URL = "ws://localhost:5000/ws";
     private StompSession session;
+
+    
+    @Autowired
+    private ObjectMapper objectMapper; // <-- Inyecta el ObjectMapper de Spring
+
     public void conectar() {
         System.out.println("[AdminWebSocketClient] Intentando conectar a " + URL);
         WebSocketStompClient stompClient = new WebSocketStompClient(new StandardWebSocketClient());
-        stompClient.setMessageConverter(new MappingJackson2MessageConverter());
+
+        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
+        converter.setObjectMapper(objectMapper);
+        stompClient.setMessageConverter(converter);
 
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
         scheduler.afterPropertiesSet();
