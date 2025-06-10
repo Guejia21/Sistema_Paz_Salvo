@@ -11,7 +11,6 @@ import co.unicauca.edu.co.compositor.fachadaServicios.servicios.IPazYSalvoServic
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
 @RestController
 @RequestMapping("/api")
 public class PazYSalvoController {
@@ -23,16 +22,18 @@ public class PazYSalvoController {
     private ContadorFallos contadorFallos;
 
     @PostMapping("/orquestadorSincrono")
-    public RespuestaPazSalvoConsultadoDTO orquestarServiciosSincronicamente(@RequestBody PeticionPazSalvoDTO objPeticion) {
-        simularFallos();
+    public RespuestaPazSalvoConsultadoDTO orquestarServiciosSincronicamente(
+            @RequestBody PeticionPazSalvoDTO objPeticion) {
+        // simularFallos();
         return pazYSalvoService.consultarPazSalvo(objPeticion);
     }
+
     @PostMapping("/orquestadorAsincrono")
-    public Mono<RespuestaPazSalvoConsultadoDTO> orquestarServiciosAsincronicamente(@RequestBody PeticionPazSalvoDTO objPeticion) {
-        simularFallos();
+    public Mono<RespuestaPazSalvoConsultadoDTO> orquestarServiciosAsincronicamente(
+            @RequestBody PeticionPazSalvoDTO objPeticion) {
+        // simularFallos();
         return pazYSalvoService.consultarPazSalvoAsincrono(objPeticion);
     }
-    
 
     /* Método para simular fallos */
     private void simularFallos() {

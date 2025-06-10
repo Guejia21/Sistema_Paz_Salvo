@@ -4,7 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import co.edu.unicauca.distribuidos.app_student.servicios.modelos.OperacionesStudentImpl;
-import co.edu.unicauca.distribuidos.app_student.servicios.modelos.respuesta.StudentStatusDTO;
+import co.edu.unicauca.distribuidos.app_student.servicios.modelos.peticion.PeticionPazSalvoDTO;
+import co.edu.unicauca.distribuidos.app_student.servicios.modelos.respuesta.RespuestaPazSalvoConsultadoDTO;
 import co.edu.unicauca.distribuidos.app_student.utilidades.UtilidadesConsola;
 
 @Component
@@ -15,55 +16,78 @@ public class Menu {
     public void mostrarMenu() {
         int option = 0;
         int id = pedirId();
-        StudentStatusDTO objRespuesta;
+        String nombre = pedirNombre();
+        PeticionPazSalvoDTO objPeticion = new PeticionPazSalvoDTO(id, nombre);
+        RespuestaPazSalvoConsultadoDTO objRespuesta;
         do {
             System.out.println("\n==========================Menu Estudiante===============================");
-            System.out.println("1. Generar paz y salvo");
-            System.out.println("2. Consultar deudas pendientes");
+            System.out.println("1. Generar paz y salvo (forma sincrona)");
+            System.out.println("2. Generar paz y salvo (forma asincrona)");
             System.out.println("3. Salir");
             option = UtilidadesConsola.leerEntero("Ingrese una opcion: ", 0, 4);
             switch (option) {
                 case 1:
-                    objRespuesta = objOperacionesStudent.generarPazYSalvo(id);
-                    // System.out.println("Respuesta del servidor: " + objRespuesta.getMensaje());
-                    // logica de la respuesta que llega
-                    if (objRespuesta.isPazYSalvo()) {
-                        System.out.println("Generando paz y salvo...");
-                        System.out.println("Se ha generado el paz y salvo correctamente para el estudiante con id "
-                                + objRespuesta.getIdEstudiante());
-
-                    } else {
-                        /*
-                         * System.out.println(
-                         * "Usted tiene deudas pendientes, para mas informacion consulta tus deudas en el menu."
-                         * );
-                         */
+                    objRespuesta = objOperacionesStudent.orquestarServiciosSincronicamente(objPeticion);
+                    // Verifica si hubo un error por fallo simulado o real
+                    if (objRespuesta.getMensaje() != null && objRespuesta.getMensaje().contains("Error al procesar")) {
                         System.out.println(objRespuesta.getMensaje());
+                    } else if (objRespuesta.isPazSalvo()) {
+                        System.out.println("Consultado deudas...");
+                        System.out.println("Usted no tiene ninguna deuda");
+                        System.out.println("Paz y salvo generado con exito!");
+                    } else {
+                        System.out.println("Listado de deudas");
+                        if (!objRespuesta.getObjAreaDeportes().isPazYSalvo()) {
+                            System.out.println("Deudas en area de deportes:");
+                            objRespuesta.getObjAreaDeportes().getDeudas().forEach(System.out::println);
+                        }
+                        if (!objRespuesta.getObjAreaFinanciera().isPazYSalvo()) {
+                            System.out.println("Deudas en area financiera:");
+                            objRespuesta.getObjAreaFinanciera().getDeudas().forEach(System.out::println);
+                        }
+                        if (!objRespuesta.getObjAreaLaboratorios().isPazYSalvo()) {
+                            System.out.println("Deudas en area laboratorios:");
+                            objRespuesta.getObjAreaLaboratorios().getDeudas().forEach(System.out::println);
+                        }
                     }
                     break;
                 case 2:
-                    objRespuesta = objOperacionesStudent.consultarDeudas(id);
-                    // System.out.println("Respuesta del servidor: " + objRespuesta.getMensaje());
-                    // logic
-                    System.out.println("Listado de deudas");
-                    if (objRespuesta.isEstadoDeportes()) {
-                        System.out.println("Usted posee deudas en el area de deportes");
-                    }
-                    if (objRespuesta.isEstadoFinanciero()) {
-                        System.out.println("Usted posee deudass en el area financiera");
-                    }
-                    if (objRespuesta.isEstadoLaboratorios()) {
-                        System.out.println("Usted posee deudas en el area de laboratorios");
+                    objRespuesta = objOperacionesStudent.orquestarServiciosAsincronicamente(objPeticion);
+                    if (objRespuesta.getMensaje() != null && objRespuesta.getMensaje().contains("Error al procesar")) {
+                        System.out.println(objRespuesta.getMensaje());
+                    } else if (objRespuesta.isPazSalvo()) {
+                        System.out.println("Consultado deudas...");
+                        System.out.println("Usted no tiene ninguna deuda");
+                        System.out.println("Paz y salvo generado con exito!");
+                    } else {
+                        System.out.println("Listado de deudas");
+                        if (!objRespuesta.getObjAreaDeportes().isPazYSalvo()) {
+                            System.out.println("Deudas en area de deportes:");
+                            objRespuesta.getObjAreaDeportes().getDeudas().forEach(System.out::println);
+                        }
+                        if (!objRespuesta.getObjAreaFinanciera().isPazYSalvo()) {
+                            System.out.println("Deudas en area financiera:");
+                            objRespuesta.getObjAreaFinanciera().getDeudas().forEach(System.out::println);
+                        }
+                        if (!objRespuesta.getObjAreaLaboratorios().isPazYSalvo()) {
+                            System.out.println("Deudas en area laboratorios:");
+                            objRespuesta.getObjAreaLaboratorios().getDeudas().forEach(System.out::println);
+                        }
                     }
                     break;
                 case 3:
                     System.out.println("Saliendo...");
+                    System.exit(0);
                     break;
             }
         } while (option != 3);
     }
 
-    public Integer pedirId() {
-        return UtilidadesConsola.leerEntero("Ingrese tu id para poder identificarte: ", 0, 10);
+    public int pedirId() {
+        return UtilidadesConsola.leerEntero("Ingrese tu id: ", 1001, 1007);
+    }
+
+    public String pedirNombre() {
+        return UtilidadesConsola.leerCadena("Ingresa tu nombre: ");
     }
 }
