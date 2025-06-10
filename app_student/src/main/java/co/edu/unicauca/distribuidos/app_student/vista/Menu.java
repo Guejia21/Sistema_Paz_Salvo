@@ -32,22 +32,38 @@ public class Menu {
                     if (objRespuesta.getMensaje() != null && objRespuesta.getMensaje().contains("Error al procesar")) {
                         System.out.println(objRespuesta.getMensaje());
                     } else if (objRespuesta.isPazSalvo()) {
-                        System.out.println("Consultado deudas...");
+                        System.out.println("Consultado tus deudas...");
                         System.out.println("Usted no tiene ninguna deuda");
                         System.out.println("Paz y salvo generado con exito!");
                     } else {
+                        System.out.println("Consultado tus deudas...");
                         System.out.println("Listado de deudas");
                         if (!objRespuesta.getObjAreaDeportes().isPazYSalvo()) {
                             System.out.println("Deudas en area de deportes:");
-                            objRespuesta.getObjAreaDeportes().getDeudas().forEach(System.out::println);
+                            objRespuesta.getObjAreaDeportes().getDeudas().forEach(deuda -> {
+                                System.out.println("Elemento: " + deuda.getElementoPrestado() +
+                                        ", Fecha préstamo: " + deuda.getFechaPrestamo() +
+                                        ", Fecha devolución estimada: " + deuda.getFechaDevolucionEstimada());
+                            });
                         }
                         if (!objRespuesta.getObjAreaFinanciera().isPazYSalvo()) {
                             System.out.println("Deudas en area financiera:");
-                            objRespuesta.getObjAreaFinanciera().getDeudas().forEach(System.out::println);
+                            objRespuesta.getObjAreaFinanciera().getDeudas().forEach(deuda -> {
+                                System.out.println("Motivo: " + deuda.getMotivo() +
+                                        ", Monto: " + deuda.getMonto() +
+                                        ", Fecha generación: " + deuda.getFechaGeneracion() +
+                                        ", Fecha límite pago: " + deuda.getFechaLimitePago() +
+                                        ", Estado: " + deuda.getEstado());
+                            });
                         }
                         if (!objRespuesta.getObjAreaLaboratorios().isPazYSalvo()) {
                             System.out.println("Deudas en area laboratorios:");
-                            objRespuesta.getObjAreaLaboratorios().getDeudas().forEach(System.out::println);
+                            objRespuesta.getObjAreaLaboratorios().getDeudas().forEach(deuda -> {
+                                System.out.println("Equipo: " + deuda.getEquipoPrestado() +
+                                        ", Fecha préstamo: " + deuda.getFechaPrestamo() +
+                                        ", Fecha devolución estimada: " + deuda.getFechaDevolucionEstimada() +
+                                        ", Estado: " + deuda.getEstado());
+                            });
                         }
                     }
                     break;
@@ -60,18 +76,34 @@ public class Menu {
                         System.out.println("Usted no tiene ninguna deuda");
                         System.out.println("Paz y salvo generado con exito!");
                     } else {
+                        System.out.println("Consultando tus deudas...");
                         System.out.println("Listado de deudas");
                         if (!objRespuesta.getObjAreaDeportes().isPazYSalvo()) {
                             System.out.println("Deudas en area de deportes:");
-                            objRespuesta.getObjAreaDeportes().getDeudas().forEach(System.out::println);
+                            objRespuesta.getObjAreaDeportes().getDeudas().forEach(deuda -> {
+                                System.out.println("Elemento: " + deuda.getElementoPrestado() +
+                                        ", Fecha préstamo: " + deuda.getFechaPrestamo() +
+                                        ", Fecha devolución estimada: " + deuda.getFechaDevolucionEstimada());
+                            });
                         }
                         if (!objRespuesta.getObjAreaFinanciera().isPazYSalvo()) {
                             System.out.println("Deudas en area financiera:");
-                            objRespuesta.getObjAreaFinanciera().getDeudas().forEach(System.out::println);
+                            objRespuesta.getObjAreaFinanciera().getDeudas().forEach(deuda -> {
+                                System.out.println("Motivo: " + deuda.getMotivo() +
+                                        ", Monto: " + deuda.getMonto() +
+                                        ", Fecha generación: " + deuda.getFechaGeneracion() +
+                                        ", Fecha límite pago: " + deuda.getFechaLimitePago() +
+                                        ", Estado: " + deuda.getEstado());
+                            });
                         }
                         if (!objRespuesta.getObjAreaLaboratorios().isPazYSalvo()) {
                             System.out.println("Deudas en area laboratorios:");
-                            objRespuesta.getObjAreaLaboratorios().getDeudas().forEach(System.out::println);
+                            objRespuesta.getObjAreaLaboratorios().getDeudas().forEach(deuda -> {
+                                System.out.println("Equipo: " + deuda.getEquipoPrestado() +
+                                        ", Fecha préstamo: " + deuda.getFechaPrestamo() +
+                                        ", Fecha devolución estimada: " + deuda.getFechaDevolucionEstimada() +
+                                        ", Estado: " + deuda.getEstado());
+                            });
                         }
                     }
                     break;
