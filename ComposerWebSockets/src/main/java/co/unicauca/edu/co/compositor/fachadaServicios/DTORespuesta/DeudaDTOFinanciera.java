@@ -1,4 +1,4 @@
-package co.edu.unicauca.areafinanciera.fachadaServices.DTO;
+package co.unicauca.edu.co.compositor.fachadaServicios.DTORespuesta;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,13 +7,13 @@ import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
-public class DeudaDTO {
+public class DeudaDTOFinanciera {
     private double monto;
     private String motivo;
     private LocalDate fechaGeneracion;
     private LocalDate fechaLimitePago;
     private String estado;
 
-    public DeudaDTO() {
+    public DeudaDTOFinanciera() {
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import co.edu.unicauca.arealaboratorios.fachadaServices.SolicitudPazSalvoInt;
 import co.edu.unicauca.arealaboratorios.fachadaServices.DTO.DTOPeticion.PeticionPazSalvoDTO;
-import co.edu.unicauca.arealaboratorios.fachadaServices.DTO.DTORespuesta.RespuestaPazSalvoDTO;
+import co.edu.unicauca.arealaboratorios.fachadaServices.DTO.DTORespuesta.RespuestaPazSalvoDTOLaboratorios;
 
 @RestController
 @RequestMapping("/api/laboratorio")
@@ -19,9 +19,9 @@ public class PazSalvoRestController {
      * Consulta si el estudiante está a paz y salvo en laboratorios.
      */
     @PostMapping("/pazsalvo")
-    public ResponseEntity<RespuestaPazSalvoDTO> consultarPazYSalvo(@RequestBody PeticionPazSalvoDTO peticion) {
+    public ResponseEntity<RespuestaPazSalvoDTOLaboratorios> consultarPazYSalvo(@RequestBody PeticionPazSalvoDTO peticion) {
         System.out.println("Consultando paz y salvo para el estudiante con ID: " + peticion.getIdEstudiante());
-        RespuestaPazSalvoDTO respuesta = servicio.consultarPazYSalvo(peticion);
+        RespuestaPazSalvoDTOLaboratorios respuesta = servicio.consultarPazYSalvo(peticion);
         return new ResponseEntity<>(respuesta, HttpStatus.OK);
     }
 

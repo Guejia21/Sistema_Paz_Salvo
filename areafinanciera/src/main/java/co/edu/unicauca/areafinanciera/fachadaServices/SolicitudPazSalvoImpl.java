@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import co.edu.unicauca.areafinanciera.capaAccesoDatos.modelo.Deuda;
 import co.edu.unicauca.areafinanciera.capaAccesoDatos.repositorio.DeudaRepositorio;
-import co.edu.unicauca.areafinanciera.fachadaServices.DTO.DeudaDTO;
-import co.edu.unicauca.areafinanciera.fachadaServices.DTO.DTORespuesta.RespuestaPazSalvoDTO;
+import co.edu.unicauca.areafinanciera.fachadaServices.DTO.DeudaDTOFinanciera;
+import co.edu.unicauca.areafinanciera.fachadaServices.DTO.DTORespuesta.RespuestaPazSalvoDTOFinanciera;
 import co.edu.unicauca.areafinanciera.fachadaServices.DTO.DTOPeticion.PeticionPazSalvoDTO;
 
 @Service
@@ -21,14 +21,14 @@ public class SolicitudPazSalvoImpl implements SolicitudPazSalvoInt {
     private ModelMapper modelMapper;
 
     @Override
-    public RespuestaPazSalvoDTO consultarPazYSalvo(PeticionPazSalvoDTO peticion) {
+    public RespuestaPazSalvoDTOFinanciera consultarPazYSalvo(PeticionPazSalvoDTO peticion) {
         List<Deuda> deudasNoPagadas = repositorio.obtenerDeudasNoPagadasPorEstudiante(peticion.getIdEstudiante());
-        List<DeudaDTO> deudasDTO = deudasNoPagadas.stream()
-                .map(deuda -> modelMapper.map(deuda, DeudaDTO.class))
+        List<DeudaDTOFinanciera> deudasDTO = deudasNoPagadas.stream()
+                .map(deuda -> modelMapper.map(deuda, DeudaDTOFinanciera.class))
                 .collect(Collectors.toList());
 
         boolean pazYSalvo = deudasDTO.isEmpty();
-        return new RespuestaPazSalvoDTO(pazYSalvo, deudasDTO);
+        return new RespuestaPazSalvoDTOFinanciera(pazYSalvo, deudasDTO);
     }
 
     @Override

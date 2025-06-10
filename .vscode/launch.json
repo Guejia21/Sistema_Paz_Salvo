@@ -8,7 +8,8 @@
             "mainClass": "co.edu.unicauca.areadeportes.AreadeportesApplication",
             "projectName": "areadeportes",
             "args": "",
-            "envFile": "${workspaceFolder}/.env"
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=37737 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=areadeportes"
         },
         {
             "type": "java",
@@ -18,7 +19,8 @@
             "mainClass": "co.edu.unicauca.areafinanciera.AreafinancieraApplication",
             "projectName": "areafinanciera",
             "args": "",
-            "envFile": "${workspaceFolder}/.env"
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=42551 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=areafinanciera"
         },
         {
             "type": "java",
@@ -27,6 +29,17 @@
             "cwd": "${workspaceFolder}",
             "mainClass": "co.edu.unicauca.arealaboratorios.ArealaboratoriosApplication",
             "projectName": "arealaboratorios",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=45913 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=arealaboratorios"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-CompositorApplication<compositor>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "co.unicauca.edu.co.compositor.CompositorApplication",
+            "projectName": "compositor",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
         }

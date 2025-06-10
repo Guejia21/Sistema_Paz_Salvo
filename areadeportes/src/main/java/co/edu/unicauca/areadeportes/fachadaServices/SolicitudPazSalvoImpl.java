@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 
 import co.edu.unicauca.areadeportes.capaAccesoDatos.modelo.Prestamo;
 import co.edu.unicauca.areadeportes.capaAccesoDatos.repositorio.PrestamoRepositorioDeportes;
-import co.edu.unicauca.areadeportes.fachadaServices.DTO.PrestamoDTO;
+import co.edu.unicauca.areadeportes.fachadaServices.DTO.PrestamoDTODeportes;
 import co.edu.unicauca.areadeportes.fachadaServices.DTO.DTOPeticion.PeticionPazSalvoDTO;
-import co.edu.unicauca.areadeportes.fachadaServices.DTO.DTORespuesta.RespuestaPazSalvoDTO;
+import co.edu.unicauca.areadeportes.fachadaServices.DTO.DTORespuesta.RespuestaPazSalvoDTODeportes;
 
 @Service
 public class SolicitudPazSalvoImpl implements SolicitudPazSalvoInt {
@@ -21,14 +21,14 @@ public class SolicitudPazSalvoImpl implements SolicitudPazSalvoInt {
     private ModelMapper modelMapper;
 
     @Override
-    public RespuestaPazSalvoDTO consultarPazYSalvo(PeticionPazSalvoDTO peticion) {
+    public RespuestaPazSalvoDTODeportes consultarPazYSalvo(PeticionPazSalvoDTO peticion) {
         List<Prestamo> prestamosPendientes = repositorio.obtenerPrestamosNoDevueltosPorEstudiante(peticion.getIdEstudiante());
-        List<PrestamoDTO> prestamosDTO = prestamosPendientes.stream()
-                .map(prestamo -> modelMapper.map(prestamo, PrestamoDTO.class))
+        List<PrestamoDTODeportes> prestamosDTO = prestamosPendientes.stream()
+                .map(prestamo -> modelMapper.map(prestamo, PrestamoDTODeportes.class))
                 .collect(Collectors.toList());
 
         boolean pazYSalvo = prestamosDTO.isEmpty();
-        return new RespuestaPazSalvoDTO(pazYSalvo, prestamosDTO);
+        return new RespuestaPazSalvoDTODeportes(pazYSalvo, prestamosDTO);
     }
 
     @Override

@@ -6,12 +6,12 @@ import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
-public class PrestamoDTO {
+public class PrestamoDTOLaboratorio {
     private LocalDate fechaPrestamo;
     private LocalDate fechaDevolucionEstimada;
     private String equipoPrestado;
     private String estado;
 
-    public PrestamoDTO() {
+    public PrestamoDTOLaboratorio() {
     }
 }

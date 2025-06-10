@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import co.edu.unicauca.areadeportes.fachadaServices.SolicitudPazSalvoInt;
 import co.edu.unicauca.areadeportes.fachadaServices.DTO.DTOPeticion.PeticionPazSalvoDTO;
-import co.edu.unicauca.areadeportes.fachadaServices.DTO.DTORespuesta.RespuestaPazSalvoDTO;
+import co.edu.unicauca.areadeportes.fachadaServices.DTO.DTORespuesta.RespuestaPazSalvoDTODeportes;
 
 @RestController
 @RequestMapping("/api/deporte")
@@ -21,9 +21,9 @@ public class PazSalvoRestController {
     private SolicitudPazSalvoInt solicitudPazSalvo;
 
     @PostMapping("/pazsalvo")
-    public ResponseEntity<RespuestaPazSalvoDTO> consultarPazYSalvo(@RequestBody PeticionPazSalvoDTO peticion) {
+    public ResponseEntity<RespuestaPazSalvoDTODeportes> consultarPazYSalvo(@RequestBody PeticionPazSalvoDTO peticion) {
         System.out.println("Consultando paz y salvo para el estudiante con ID: " + peticion.getIdEstudiante());
-        RespuestaPazSalvoDTO respuesta = solicitudPazSalvo.consultarPazYSalvo(peticion);
+        RespuestaPazSalvoDTODeportes respuesta = solicitudPazSalvo.consultarPazYSalvo(peticion);
         return new ResponseEntity<>(respuesta, HttpStatus.OK);
     }
 

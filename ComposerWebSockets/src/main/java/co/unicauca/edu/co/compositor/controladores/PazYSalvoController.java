@@ -1,39 +1,38 @@
 package co.unicauca.edu.co.compositor.controladores;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
+import co.unicauca.edu.co.compositor.fachadaServicios.DTOPeticion.PeticionPazSalvoDTO;
+import co.unicauca.edu.co.compositor.fachadaServicios.DTORespuesta.RespuestaPazSalvoConsultadoDTO;
+import co.unicauca.edu.co.compositor.fachadaServicios.servicios.IPazYSalvoService;
 
-import co.unicauca.edu.co.compositor.fachadaServicios.PazYSalvoServiceImpl;
-import co.unicauca.edu.co.compositor.fachadaServicios.dtos.StudentStatusDTO;
-import main.java.co.unicauca.edu.co.compositor.controladores.ContadorFallos;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping("/api")
 public class PazYSalvoController {
 
     @Autowired
-    private PazYSalvoServiceImpl pazYSalvoService;
+    private IPazYSalvoService pazYSalvoService;
 
     @Autowired
     private ContadorFallos contadorFallos;
 
-    @GetMapping("/generarPs/{id}")
-    public ResponseEntity<StudentStatusDTO> generarPazYSalvo(@PathVariable Integer id) {
+    @PostMapping("/orquestadorSincrono")
+    public RespuestaPazSalvoConsultadoDTO orquestarServiciosSincronicamente(@RequestBody PeticionPazSalvoDTO objPeticion) {
         simularFallos();
-        StudentStatusDTO respuesta = pazYSalvoService.verificarEstado(String.valueOf(id));
-        return ResponseEntity.ok(respuesta);
+        return pazYSalvoService.consultarPazSalvo(objPeticion);
     }
-
-    @GetMapping("/consultar/{id}")
-    public ResponseEntity<StudentStatusDTO> consultarDeudas(@PathVariable Integer id) {
+    @PostMapping("/orquestadorAsincrono")
+    public Mono<RespuestaPazSalvoConsultadoDTO> orquestarServiciosAsincronicamente(@RequestBody PeticionPazSalvoDTO objPeticion) {
         simularFallos();
-        StudentStatusDTO respuesta = pazYSalvoService.consultarDeudas(String.valueOf(id));
-        return ResponseEntity.ok(respuesta);
+        return pazYSalvoService.consultarPazSalvoAsincrono(objPeticion);
     }
+    
 
     /* Método para simular fallos */
     private void simularFallos() {

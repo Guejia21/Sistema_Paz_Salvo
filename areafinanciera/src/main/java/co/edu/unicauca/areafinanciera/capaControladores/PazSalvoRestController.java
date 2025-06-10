@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import co.edu.unicauca.areafinanciera.fachadaServices.SolicitudPazSalvoInt;
 import co.edu.unicauca.areafinanciera.fachadaServices.DTO.DTOPeticion.PeticionPazSalvoDTO;
-import co.edu.unicauca.areafinanciera.fachadaServices.DTO.DTORespuesta.RespuestaPazSalvoDTO;
+import co.edu.unicauca.areafinanciera.fachadaServices.DTO.DTORespuesta.RespuestaPazSalvoDTOFinanciera;
 
 @RestController
 @RequestMapping("/api/financiera")
@@ -16,9 +16,9 @@ public class PazSalvoRestController {
     private SolicitudPazSalvoInt servicio;
 
     @PostMapping("/pazsalvo")
-    public ResponseEntity<RespuestaPazSalvoDTO> consultarPazYSalvo(@RequestBody PeticionPazSalvoDTO peticion) {
+    public ResponseEntity<RespuestaPazSalvoDTOFinanciera> consultarPazYSalvo(@RequestBody PeticionPazSalvoDTO peticion) {
         System.out.println("Consultando paz y salvo para el estudiante con ID: " + peticion.getIdEstudiante());
-        RespuestaPazSalvoDTO respuesta = servicio.consultarPazYSalvo(peticion);
+        RespuestaPazSalvoDTOFinanciera respuesta = servicio.consultarPazYSalvo(peticion);
         return new ResponseEntity<>(respuesta, HttpStatus.OK);
     }
 

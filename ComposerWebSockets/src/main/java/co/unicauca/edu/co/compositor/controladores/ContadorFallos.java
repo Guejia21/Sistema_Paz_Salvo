@@ -1,6 +1,7 @@
-package main.java.co.unicauca.edu.co.compositor.controladores;
+package co.unicauca.edu.co.compositor.controladores;
 
 import java.util.concurrent.atomic.AtomicInteger;
+import org.springframework.stereotype.Component;
 
 @Component
 public class ContadorFallos {

@@ -1,7 +1,7 @@
 package co.edu.unicauca.areadeportes.fachadaServices;
 
 import co.edu.unicauca.areadeportes.fachadaServices.DTO.DTOPeticion.PeticionPazSalvoDTO;
-import co.edu.unicauca.areadeportes.fachadaServices.DTO.DTORespuesta.RespuestaPazSalvoDTO;
+import co.edu.unicauca.areadeportes.fachadaServices.DTO.DTORespuesta.RespuestaPazSalvoDTODeportes;
 
 public interface SolicitudPazSalvoInt {
     /**
@@ -10,7 +10,7 @@ public interface SolicitudPazSalvoInt {
      * @param peticion Información de la solicitud con el ID del estudiante
      * @return Respuesta con el estado y los préstamos pendientes (si existen)
      */
-    public RespuestaPazSalvoDTO consultarPazYSalvo(PeticionPazSalvoDTO peticion);
+    public RespuestaPazSalvoDTODeportes consultarPazYSalvo(PeticionPazSalvoDTO peticion);
 
     /**
      * Elimina los préstamos no devueltos por el estudiante (simula entrega).

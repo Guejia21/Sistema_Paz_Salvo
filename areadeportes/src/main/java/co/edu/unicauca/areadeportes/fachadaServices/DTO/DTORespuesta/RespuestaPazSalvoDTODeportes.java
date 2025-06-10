@@ -4,14 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 
-import co.edu.unicauca.areadeportes.fachadaServices.DTO.PrestamoDTO;
+import co.edu.unicauca.areadeportes.fachadaServices.DTO.PrestamoDTODeportes;
 
 @Data
 @AllArgsConstructor
-public class RespuestaPazSalvoDTO {
+public class RespuestaPazSalvoDTODeportes {
     private boolean pazYSalvo;
-    private List<PrestamoDTO> prestamosPendientes;
+    private List<PrestamoDTODeportes> deudas;
 
-    public RespuestaPazSalvoDTO() {
+    public RespuestaPazSalvoDTODeportes() {
     }
 }

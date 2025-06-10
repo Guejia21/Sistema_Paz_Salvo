@@ -5,14 +5,14 @@ import lombok.Data;
 
 import java.util.List;
 
-import co.edu.unicauca.areafinanciera.fachadaServices.DTO.DeudaDTO;
+import co.edu.unicauca.areafinanciera.fachadaServices.DTO.DeudaDTOFinanciera;
 
 @Data
 @AllArgsConstructor
-public class RespuestaPazSalvoDTO {
+public class RespuestaPazSalvoDTOFinanciera {
     private boolean pazYSalvo;
-    private List<DeudaDTO> deudasPendientes;
+    private List<DeudaDTOFinanciera> deudas;
 
-    public RespuestaPazSalvoDTO() {
+    public RespuestaPazSalvoDTOFinanciera() {
     }
 }
