@@ -28,8 +28,7 @@ public class Menu {
             switch (option) {
                 case 1:
                     objRespuesta = objOperacionesStudent.orquestarServiciosSincronicamente(objPeticion);
-                    // Verifica si hubo un error por fallo simulado o real
-                    if (objRespuesta.getMensaje() != null && objRespuesta.getMensaje().contains("Error al procesar")) {
+                    if (objRespuesta.getMensaje() != null && objRespuesta.getMensaje().toLowerCase().contains("error")) {
                         System.out.println(objRespuesta.getMensaje());
                     } else if (objRespuesta.isPazSalvo()) {
                         System.out.println("Consultado tus deudas...");
@@ -38,7 +37,7 @@ public class Menu {
                     } else {
                         System.out.println("Consultado tus deudas...");
                         System.out.println("Listado de deudas");
-                        if (!objRespuesta.getObjAreaDeportes().isPazYSalvo()) {
+                        if (objRespuesta.getObjAreaDeportes() != null && Boolean.FALSE.equals(objRespuesta.getObjAreaDeportes().isPazYSalvo())) {
                             System.out.println("Deudas en area de deportes:");
                             objRespuesta.getObjAreaDeportes().getDeudas().forEach(deuda -> {
                                 System.out.println("Elemento: " + deuda.getElementoPrestado() +
@@ -46,7 +45,7 @@ public class Menu {
                                         ", Fecha devolución estimada: " + deuda.getFechaDevolucionEstimada());
                             });
                         }
-                        if (!objRespuesta.getObjAreaFinanciera().isPazYSalvo()) {
+                        if (objRespuesta.getObjAreaFinanciera() != null && Boolean.FALSE.equals(objRespuesta.getObjAreaFinanciera().isPazYSalvo())) {
                             System.out.println("Deudas en area financiera:");
                             objRespuesta.getObjAreaFinanciera().getDeudas().forEach(deuda -> {
                                 System.out.println("Motivo: " + deuda.getMotivo() +
@@ -56,7 +55,7 @@ public class Menu {
                                         ", Estado: " + deuda.getEstado());
                             });
                         }
-                        if (!objRespuesta.getObjAreaLaboratorios().isPazYSalvo()) {
+                        if (objRespuesta.getObjAreaLaboratorios() != null && Boolean.FALSE.equals(objRespuesta.getObjAreaLaboratorios().isPazYSalvo())) {
                             System.out.println("Deudas en area laboratorios:");
                             objRespuesta.getObjAreaLaboratorios().getDeudas().forEach(deuda -> {
                                 System.out.println("Equipo: " + deuda.getEquipoPrestado() +
@@ -69,7 +68,7 @@ public class Menu {
                     break;
                 case 2:
                     objRespuesta = objOperacionesStudent.orquestarServiciosAsincronicamente(objPeticion);
-                    if (objRespuesta.getMensaje() != null && objRespuesta.getMensaje().contains("Error al procesar")) {
+                    if (objRespuesta.getMensaje() != null && objRespuesta.getMensaje().toLowerCase().contains("error")) {
                         System.out.println(objRespuesta.getMensaje());
                     } else if (objRespuesta.isPazSalvo()) {
                         System.out.println("Consultado deudas...");
@@ -78,7 +77,7 @@ public class Menu {
                     } else {
                         System.out.println("Consultando tus deudas...");
                         System.out.println("Listado de deudas");
-                        if (!objRespuesta.getObjAreaDeportes().isPazYSalvo()) {
+                        if (objRespuesta.getObjAreaDeportes() != null && Boolean.FALSE.equals(objRespuesta.getObjAreaDeportes().isPazYSalvo())) {
                             System.out.println("Deudas en area de deportes:");
                             objRespuesta.getObjAreaDeportes().getDeudas().forEach(deuda -> {
                                 System.out.println("Elemento: " + deuda.getElementoPrestado() +
@@ -86,7 +85,7 @@ public class Menu {
                                         ", Fecha devolución estimada: " + deuda.getFechaDevolucionEstimada());
                             });
                         }
-                        if (!objRespuesta.getObjAreaFinanciera().isPazYSalvo()) {
+                        if (objRespuesta.getObjAreaFinanciera() != null && Boolean.FALSE.equals(objRespuesta.getObjAreaFinanciera().isPazYSalvo())) {
                             System.out.println("Deudas en area financiera:");
                             objRespuesta.getObjAreaFinanciera().getDeudas().forEach(deuda -> {
                                 System.out.println("Motivo: " + deuda.getMotivo() +
@@ -96,7 +95,7 @@ public class Menu {
                                         ", Estado: " + deuda.getEstado());
                             });
                         }
-                        if (!objRespuesta.getObjAreaLaboratorios().isPazYSalvo()) {
+                        if (objRespuesta.getObjAreaLaboratorios() != null && Boolean.FALSE.equals(objRespuesta.getObjAreaLaboratorios().isPazYSalvo())) {
                             System.out.println("Deudas en area laboratorios:");
                             objRespuesta.getObjAreaLaboratorios().getDeudas().forEach(deuda -> {
                                 System.out.println("Equipo: " + deuda.getEquipoPrestado() +

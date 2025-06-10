@@ -8,6 +8,7 @@ import org.springframework.retry.annotation.Backoff;
 
 import co.edu.unicauca.distribuidos.app_student.servicios.modelos.peticion.PeticionPazSalvoDTO;
 import co.edu.unicauca.distribuidos.app_student.servicios.modelos.respuesta.RespuestaPazSalvoConsultadoDTO;
+import co.edu.unicauca.distribuidos.app_student.servicios.modelos.respuesta.RespuestaPazSalvoDTOArea;
 import feign.FeignException;
 
 @Service
@@ -34,7 +35,15 @@ public class OperacionesStudentImpl {
         System.out.println("Todos los reintentos fallaron");
         RespuestaPazSalvoConsultadoDTO objRespuesta = new RespuestaPazSalvoConsultadoDTO();
         objRespuesta.setMensaje("Error al procesar tu petición, por favor intenta más tarde.");
-        // Puedes dejar los demás campos en null o con valores por defecto
+
+        // Crea objetos vacíos para evitar NullPointerException
+        objRespuesta.setObjAreaDeportes(new RespuestaPazSalvoDTOArea<>());
+        objRespuesta.setObjAreaFinanciera(new RespuestaPazSalvoDTOArea<>());
+        objRespuesta.setObjAreaLaboratorios(new RespuestaPazSalvoDTOArea<>());
+
+        // Puedes dejar pazYSalvo en false o null según tu lógica
+        objRespuesta.setPazSalvo(false);
+
         return objRespuesta;
     }
 }
