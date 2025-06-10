@@ -94,6 +94,7 @@ function conectar() {
         setConectado(false);
       }
     );
+    mostrarMensajeExito();
   } catch (error) {
     mostrarMensajeError(error);
     return;
@@ -112,7 +113,7 @@ function suscripcionAChat(frame) {
   setConectado(true); // <-- Movido al inicio de la función
   // Suscripción al canal de notificaciones generales
   clienteAdmin.subscribe('/notificaciones/generales', recibirNotificacion);
-  const areaSeleccionada = document.querySelector('in1put[name="area"]:checked').value;
+  const areaSeleccionada = document.querySelector('input[name="area"]:checked').value;
   // Suscripción al canal personalizado del administrador
   clienteAdmin.subscribe(`/notificaciones/${areaSeleccionada}`, recibirNotificacion);
 }

@@ -34,6 +34,7 @@ public class PazYSalvoServiceImpl implements IPazYSalvoService {
     @Override
     public RespuestaPazSalvoConsultadoDTO consultarPazSalvo(PeticionPazSalvoDTO objPeticion) {
         System.out.println("[Sincrono] Consultado paz y salvo de estudiante con ID: " + objPeticion.getIdEstudiante());
+        adminWebSocketClient.notificar("/notificaciones/generales", "El estudiante" + objPeticion.getNombreEstudiante() + " ha realizado una nueva solicitud de paz y salvo.");
         RespuestaPazSalvoConsultadoDTO objRespuesta = new RespuestaPazSalvoConsultadoDTO();
         boolean pazSalvoDeportes = false;
         boolean pazSalvoLaboratorios = false;
@@ -82,20 +83,24 @@ public class PazYSalvoServiceImpl implements IPazYSalvoService {
             objRespuesta.setPazSalvo(true);
             objRespuesta.setMensaje("El estudiante está a paz y salvo en todas las áreas.");
             // Enviar mensaje a WebSocket a todos los admins
+            adminWebSocketClient.notificar("/notificaciones/generales", "El estudiante" + objPeticion.getNombreEstudiante() + " se encuentra en paz y salvo en todas las areas.");
         } else {
             objRespuesta.setPazSalvo(false);
             StringBuilder mensaje = new StringBuilder("El estudiante no está a paz y salvo en las siguientes áreas:");
             if (!pazSalvoDeportes){
                 mensaje.append(" Deportes");
                 //Enviar mensaje a WebSocket al administrador de deportes
+                adminWebSocketClient.notificar("/notificaciones/deportes", "El estudiante " + objPeticion.getNombreEstudiante() + " no está a paz y salvo en Deportes." + objRespuesta.getObjAreaDeportes().getDeudas());
             } 
             if (!pazSalvoFinanciera) {
                 mensaje.append(" Financiera");
                 //Enviar mensaje a WebSocket al administrador financiero
+                adminWebSocketClient.notificar("/notificaciones/financiera", "El estudiante " + objPeticion.getNombreEstudiante() + " no está a paz y salvo en Financiera." + objRespuesta.getObjAreaFinanciera().getDeudas());
             }
             if (!pazSalvoLaboratorios) {
                 mensaje.append(" Laboratorios");
                 //Enviar mensaje a WebSocket al administrador de laboratorios
+                adminWebSocketClient.notificar("/notificaciones/laboratorios", "El estudiante " + objPeticion.getNombreEstudiante() + " no está a paz y salvo en Laboratorios." + objRespuesta.getObjAreaLaboratorios().getDeudas());
             }
             objRespuesta.setMensaje(mensaje.toString());
         }
@@ -105,6 +110,7 @@ public class PazYSalvoServiceImpl implements IPazYSalvoService {
     @Override
     public Mono<RespuestaPazSalvoConsultadoDTO> consultarPazSalvoAsincrono(PeticionPazSalvoDTO objPeticion) {
         System.out.println("[Asincrono] Consultado paz y salvo de estudiante con ID: " + objPeticion.getIdEstudiante());
+        adminWebSocketClient.notificar("/notificaciones/generales", "El estudiante" + objPeticion.getNombreEstudiante() + " ha realizado una nueva solicitud de paz y salvo.");
         RespuestaPazSalvoConsultadoDTO objRespuesta = new RespuestaPazSalvoConsultadoDTO();        
         //Llamada al 1er Servicio: Deportes
         String urlServicioDeportes = "http://localhost:5001/api/deporte/pazsalvo"; 
@@ -155,20 +161,24 @@ public class PazYSalvoServiceImpl implements IPazYSalvoService {
                     objRespuesta.setPazSalvo(true);
                     objRespuesta.setMensaje("El estudiante está a paz y salvo en todas las áreas.");
                     // Enviar mensaje a WebSocket a todos los admins
+                    adminWebSocketClient.notificar("/notificaciones/generales", "El estudiante" + objPeticion.getNombreEstudiante() + " se encuentra en paz y salvo en todas las areas.");
                 } else {
                     objRespuesta.setPazSalvo(false);
                     StringBuilder mensaje = new StringBuilder("El estudiante no está a paz y salvo en las siguientes áreas:");
                 if (!pazSalvoDeportes){
-                mensaje.append(" Deportes");
-                //Enviar mensaje a WebSocket al administrador de deportes
+                    mensaje.append(" Deportes");
+                    //Enviar mensaje a WebSocket al administrador de deportes
+                    adminWebSocketClient.notificar("/notificaciones/deportes", "El estudiante " + objPeticion.getNombreEstudiante() + " no está a paz y salvo en Deportes." + respuestaDeportes.getDeudas());
                 } 
                 if (!pazSalvoFinanciera) {
                     mensaje.append(" Financiera");
                     //Enviar mensaje a WebSocket al administrador financiero
+                    adminWebSocketClient.notificar("/notificaciones/financiera", "El estudiante " + objPeticion.getNombreEstudiante() + " no está a paz y salvo en Financiera." + respuestaFinanciera.getDeudas());
                 }
                 if (!pazSalvoLaboratorios) {
                     mensaje.append(" Laboratorios");
                     //Enviar mensaje a WebSocket al administrador de laboratorios
+                    adminWebSocketClient.notificar("/notificaciones/laboratorios", "El estudiante " + objPeticion.getNombreEstudiante() + " no está a paz y salvo en Laboratorios." + respuestaLaboratorios.getDeudas());
                 }
                 objRespuesta.setMensaje(mensaje.toString());
                 }

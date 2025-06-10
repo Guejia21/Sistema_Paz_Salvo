@@ -7,6 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class PeticionPazSalvoDTO {
     private int idEstudiante;
+    private String nombreEstudiante;
 
     public PeticionPazSalvoDTO() {
     }
