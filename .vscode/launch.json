@@ -42,6 +42,16 @@
             "projectName": "compositor",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-AppStudentApplication<app_student>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "co.edu.unicauca.distribuidos.app_student.AppStudentApplication",
+            "projectName": "app_student",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }
