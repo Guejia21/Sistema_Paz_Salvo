@@ -7,6 +7,7 @@ import co.unicauca.edu.co.compositor.fachadaServicios.DTORespuesta.PrestamoDTODe
 import co.unicauca.edu.co.compositor.fachadaServicios.DTORespuesta.PrestamoDTOLaboratorio;
 import co.unicauca.edu.co.compositor.fachadaServicios.DTORespuesta.RespuestaPazSalvoConsultadoDTO;
 import co.unicauca.edu.co.compositor.fachadaServicios.DTORespuesta.RespuestaPazSalvoDTOArea;
+
 import jakarta.annotation.PostConstruct;
 import reactor.core.publisher.Mono;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -88,13 +89,24 @@ public class PazYSalvoServiceImpl implements IPazYSalvoService {
         if(pazSalvoDeportes && pazSalvoFinanciera && pazSalvoLaboratorios){
             objRespuesta.setPazSalvo(true);
             objRespuesta.setMensaje("El estudiante está a paz y salvo en todas las áreas.");
-            // Enviar mensaje a WebSocket a todos los admins
-            
+            // Notificar a todos los admins de la solicitud
             adminWebSocketClient.notificar(
                 "/notificaciones/generales",
                 Map.of("contenido", "El estudiante " + objPeticion.getNombreEstudiante() + " se encuentra en paz y salvo en todas las areas.")
             );
-
+            // Notificar a cada área que el estudiante está a paz y salvo en su área
+            adminWebSocketClient.notificar(
+                "/notificaciones/deportes",
+                Map.of("contenido", "El estudiante " + objPeticion.getNombreEstudiante() + " está a paz y salvo en Deportes.")
+            );
+            adminWebSocketClient.notificar(
+                "/notificaciones/financiera",
+                Map.of("contenido", "El estudiante " + objPeticion.getNombreEstudiante() + " está a paz y salvo en Financiera.")
+            );
+            adminWebSocketClient.notificar(
+                "/notificaciones/laboratorios",
+                Map.of("contenido", "El estudiante " + objPeticion.getNombreEstudiante() + " está a paz y salvo en Laboratorios.")
+            );
         } else {
             objRespuesta.setPazSalvo(false);
             StringBuilder mensaje = new StringBuilder("El estudiante no está a paz y salvo en las siguientes áreas:");
@@ -143,6 +155,7 @@ public class PazYSalvoServiceImpl implements IPazYSalvoService {
             "/notificaciones/generales",
             Map.of("contenido", "El estudiante " + objPeticion.getNombreEstudiante() + " ha realizado una nueva solicitud de paz y salvo.")
         );
+        
         RespuestaPazSalvoConsultadoDTO objRespuesta = new RespuestaPazSalvoConsultadoDTO();        
         //Llamada al 1er Servicio: Deportes
         String urlServicioDeportes = "http://localhost:5001/api/deporte/pazsalvo"; 
@@ -193,6 +206,19 @@ public class PazYSalvoServiceImpl implements IPazYSalvoService {
                     objRespuesta.setPazSalvo(true);
                     objRespuesta.setMensaje("El estudiante está a paz y salvo en todas las áreas.");
                     // Enviar mensaje a WebSocket a todos los admins
+                    // Notificar a cada área que el estudiante está a paz y salvo en su área
+                    adminWebSocketClient.notificar(
+                        "/notificaciones/deportes",
+                        Map.of("contenido", "El estudiante " + objPeticion.getNombreEstudiante() + " está a paz y salvo en Deportes.")
+                    );
+                    adminWebSocketClient.notificar(
+                        "/notificaciones/financiera",
+                        Map.of("contenido", "El estudiante " + objPeticion.getNombreEstudiante() + " está a paz y salvo en Financiera.")
+                    );
+                    adminWebSocketClient.notificar(
+                        "/notificaciones/laboratorios",
+                        Map.of("contenido", "El estudiante " + objPeticion.getNombreEstudiante() + " está a paz y salvo en Laboratorios.")
+                    );
                     adminWebSocketClient.notificar("/notificaciones/generales", "El estudiante" + objPeticion.getNombreEstudiante() + " se encuentra en paz y salvo en todas las areas.");
                 } else {
                     objRespuesta.setPazSalvo(false);
