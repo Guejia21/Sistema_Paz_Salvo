@@ -143,7 +143,7 @@ public class PazYSalvoServiceImpl implements IPazYSalvoService {
             "/notificaciones/generales",
             Map.of("contenido", "El estudiante " + objPeticion.getNombreEstudiante() + " ha realizado una nueva solicitud de paz y salvo.")
         );
-RespuestaPazSalvoConsultadoDTO objRespuesta = new RespuestaPazSalvoConsultadoDTO();        
+        RespuestaPazSalvoConsultadoDTO objRespuesta = new RespuestaPazSalvoConsultadoDTO();        
         //Llamada al 1er Servicio: Deportes
         String urlServicioDeportes = "http://localhost:5001/api/deporte/pazsalvo"; 
         Mono<RespuestaPazSalvoDTOArea<PrestamoDTODeportes>> objRespuestaDeportes = webClient.post()
@@ -199,6 +199,9 @@ RespuestaPazSalvoConsultadoDTO objRespuesta = new RespuestaPazSalvoConsultadoDTO
                     StringBuilder mensaje = new StringBuilder("El estudiante no está a paz y salvo en las siguientes áreas:");
                 if (!pazSalvoDeportes){
                     mensaje.append(" Deportes");
+
+                    System.out.println("Deudas enviadas a deportes: " + objRespuesta.getObjAreaDeportes().getDeudas());
+                    
                     //Enviar mensaje a WebSocket al administrador de deportes
                     adminWebSocketClient.notificar(
                         "/notificaciones/deportes",
@@ -210,6 +213,8 @@ RespuestaPazSalvoConsultadoDTO objRespuesta = new RespuestaPazSalvoConsultadoDTO
                 } 
                 if (!pazSalvoFinanciera) {
                     mensaje.append(" Financiera");
+                    
+                    System.out.println("Deudas enviadas a financiera: " + objRespuesta.getObjAreaFinanciera().getDeudas());
                     //Enviar mensaje a WebSocket al administrador financiero
                     adminWebSocketClient.notificar(
                         "/notificaciones/financiera",
@@ -221,6 +226,7 @@ RespuestaPazSalvoConsultadoDTO objRespuesta = new RespuestaPazSalvoConsultadoDTO
                 }
                 if (!pazSalvoLaboratorios) {
                     mensaje.append(" Laboratorios");
+                    System.out.println("Deudas enviadas a laboratorios: " + objRespuesta.getObjAreaLaboratorios().getDeudas());
                     //Enviar mensaje a WebSocket al administrador de laboratorios
                     adminWebSocketClient.notificar(
                         "/notificaciones/laboratorios",
