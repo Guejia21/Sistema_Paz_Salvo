@@ -6,7 +6,8 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.retry.annotation.Backoff;
 
-import co.edu.unicauca.distribuidos.app_student.servicios.modelos.respuesta.StudentStatusDTO;
+import co.edu.unicauca.distribuidos.app_student.servicios.modelos.peticion.PeticionPazSalvoDTO;
+import co.edu.unicauca.distribuidos.app_student.servicios.modelos.respuesta.RespuestaPazSalvoConsultadoDTO;
 import feign.FeignException;
 
 @Service
@@ -14,25 +15,26 @@ public class OperacionesStudentImpl {
     @Autowired
     private OperacionesStudent request;
 
+    /* Petición síncrona */
     @Retryable(value = { FeignException.class }, maxAttempts = 3, backoff = @Backoff(delay = 4000))
-    public StudentStatusDTO generarPazYSalvo(int id) {
-        // se ejecuta cuando no hay fallos
-        System.out.println("Intentando generar paz y salvo...");
-        return request.generarPazYSalvo(id);
+    public RespuestaPazSalvoConsultadoDTO orquestarServiciosSincronicamente(PeticionPazSalvoDTO objPeticion) {
+        System.out.println("Intentando generar paz y salvo de forma síncrona...");
+        return request.orquestarServiciosSincronicamente(objPeticion);
     }
 
+    /* Petición asíncrona */
     @Retryable(value = { FeignException.class }, maxAttempts = 3, backoff = @Backoff(delay = 4000))
-    public StudentStatusDTO consultarDeudas(int id) {
-        // se ejecuta cuando no hay fallos
-        System.out.println("Intentando consultar tus deudas...");
-        return request.consultarDeudas(id);
+    public RespuestaPazSalvoConsultadoDTO orquestarServiciosAsincronicamente(PeticionPazSalvoDTO objPeticion) {
+        System.out.println("Intentando genera paz y salvo de forma asíncrona...");
+        return request.orquestarServiciosAsincronicamente(objPeticion);
     }
 
     @Recover
-    public StudentStatusDTO recuperar(FeignException e, int id) {
+    public RespuestaPazSalvoConsultadoDTO recuperar(FeignException e, PeticionPazSalvoDTO objPeticion) {
         System.out.println("Todos los reintentos fallaron");
-        StudentStatusDTO objRespuesta = new StudentStatusDTO();
-        objRespuesta.setMensaje("Error al procesar tu peticion, por favor intenta mas tarde.");
+        RespuestaPazSalvoConsultadoDTO objRespuesta = new RespuestaPazSalvoConsultadoDTO();
+        objRespuesta.setMensaje("Error al procesar tu petición, por favor intenta más tarde.");
+        // Puedes dejar los demás campos en null o con valores por defecto
         return objRespuesta;
     }
 }
