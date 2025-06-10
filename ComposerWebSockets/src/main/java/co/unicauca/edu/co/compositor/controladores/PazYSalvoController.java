@@ -24,14 +24,14 @@ public class PazYSalvoController {
     @PostMapping("/orquestadorSincrono")
     public RespuestaPazSalvoConsultadoDTO orquestarServiciosSincronicamente(
             @RequestBody PeticionPazSalvoDTO objPeticion) {
-        // simularFallos();
+        simularFallos();
         return pazYSalvoService.consultarPazSalvo(objPeticion);
     }
 
     @PostMapping("/orquestadorAsincrono")
     public Mono<RespuestaPazSalvoConsultadoDTO> orquestarServiciosAsincronicamente(
             @RequestBody PeticionPazSalvoDTO objPeticion) {
-        // simularFallos();
+        simularFallos();
         return pazYSalvoService.consultarPazSalvoAsincrono(objPeticion);
     }
 

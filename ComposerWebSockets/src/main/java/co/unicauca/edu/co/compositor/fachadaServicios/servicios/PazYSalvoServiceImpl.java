@@ -7,7 +7,7 @@ import co.unicauca.edu.co.compositor.fachadaServicios.DTORespuesta.PrestamoDTODe
 import co.unicauca.edu.co.compositor.fachadaServicios.DTORespuesta.PrestamoDTOLaboratorio;
 import co.unicauca.edu.co.compositor.fachadaServicios.DTORespuesta.RespuestaPazSalvoConsultadoDTO;
 import co.unicauca.edu.co.compositor.fachadaServicios.DTORespuesta.RespuestaPazSalvoDTOArea;
-
+import co.unicauca.edu.co.compositor.controladores.ContadorFallos;
 import jakarta.annotation.PostConstruct;
 import reactor.core.publisher.Mono;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -22,17 +22,16 @@ import org.springframework.stereotype.Service;
 public class PazYSalvoServiceImpl implements IPazYSalvoService {
     private final AdminWebSocketClient adminWebSocketClient;
     private final WebClient webClient;
+    private final ContadorFallos contadorFallos; // Inyecta el bean
+
     public PazYSalvoServiceImpl(
-        AdminWebSocketClient adminWebSocketClient, WebClient webClient        
+        AdminWebSocketClient adminWebSocketClient, 
+        WebClient webClient,
+        ContadorFallos contadorFallos // Agrega aquí
     ) {
         this.webClient = webClient;
-        this.adminWebSocketClient = adminWebSocketClient;        
-    }
-
-    @PostConstruct
-    public void init() {
-        System.out.println("[PazYSalvoServiceImpl] Inicializando y conectando WebSocket...");
-        adminWebSocketClient.conectar();
+        this.adminWebSocketClient = adminWebSocketClient;
+        this.contadorFallos = contadorFallos; // Asigna aquí
     }
 
     @Override
@@ -46,55 +45,68 @@ public class PazYSalvoServiceImpl implements IPazYSalvoService {
         boolean pazSalvoDeportes = false;
         boolean pazSalvoLaboratorios = false;
         boolean pazSalvoFinanciera = false;
-        try{
-            //Llamada al 1er Servicio: Deportes
-            String urlServicioDeportes = "http://localhost:5001/api/deporte/pazsalvo"; 
-            RespuestaPazSalvoDTOArea<PrestamoDTODeportes> objRespuestaDeportes = webClient.post()
-                .uri(urlServicioDeportes)
-                .bodyValue(objPeticion)
-                .retrieve()
-                //La respuesta de cada area siempre es la misma, solo cambia el tipo de deuda o prestamo
-                .bodyToMono(new ParameterizedTypeReference<RespuestaPazSalvoDTOArea<PrestamoDTODeportes>>() {})
-                .block();
-            objRespuesta.setObjAreaDeportes(objRespuestaDeportes);
-            if(objRespuestaDeportes.isPazYSalvo()) pazSalvoDeportes = true;
-            //Llamada al 2do Servicio: Financiera
-            String urlServicioFinanciera = "http://localhost:5002/api/financiera/pazsalvo";
-            RespuestaPazSalvoDTOArea<DeudaDTOFinanciera> objRespuestaFinanciera = webClient.post()
-                .uri(urlServicioFinanciera)
-                .bodyValue(objPeticion)
-                .retrieve()
-                //La respuesta de cada area siempre es la misma, solo cambia el tipo de deuda o prestamo
-                .bodyToMono(new ParameterizedTypeReference<RespuestaPazSalvoDTOArea<DeudaDTOFinanciera>>() {})
-                .block();
-            objRespuesta.setObjAreaFinanciera(objRespuestaFinanciera);
-            if(objRespuestaFinanciera.isPazYSalvo()) pazSalvoFinanciera = true;
-            //Llamada al 3er Servicio: Laboratorios
-            String urlServicioLaboratorios = "http://localhost:5003/api/laboratorio/pazsalvo";
-            RespuestaPazSalvoDTOArea<PrestamoDTOLaboratorio> objRespuestaLaboratorios = webClient.post()
-                .uri(urlServicioLaboratorios)
-                .bodyValue(objPeticion)
-                .retrieve()
-                //La respuesta de cada area siempre es la misma, solo cambia el tipo de deuda o prestamo
-                .bodyToMono(new ParameterizedTypeReference<RespuestaPazSalvoDTOArea<PrestamoDTOLaboratorio>>() {})
-                .block();
-            objRespuesta.setObjAreaLaboratorios(objRespuestaLaboratorios);
-            if(objRespuestaLaboratorios.isPazYSalvo()) pazSalvoLaboratorios = true;
+
+        int intentos = 0;
+        final int MAX_INTENTOS = 3;
+        boolean exito = false;
+
+        while (intentos < MAX_INTENTOS && !exito) {
+            try {
+                //Llamada al 1er Servicio: Deportes
+                String urlServicioDeportes = "http://localhost:5001/api/deporte/pazsalvo"; 
+                RespuestaPazSalvoDTOArea<PrestamoDTODeportes> objRespuestaDeportes = webClient.post()
+                    .uri(urlServicioDeportes)
+                    .bodyValue(objPeticion)
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<RespuestaPazSalvoDTOArea<PrestamoDTODeportes>>() {})
+                    .block();
+                objRespuesta.setObjAreaDeportes(objRespuestaDeportes);
+                if(objRespuestaDeportes.isPazYSalvo()) pazSalvoDeportes = true;
+
+                //Llamada al 2do Servicio: Financiera
+                String urlServicioFinanciera = "http://localhost:5002/api/financiera/pazsalvo";
+                RespuestaPazSalvoDTOArea<DeudaDTOFinanciera> objRespuestaFinanciera = webClient.post()
+                    .uri(urlServicioFinanciera)
+                    .bodyValue(objPeticion)
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<RespuestaPazSalvoDTOArea<DeudaDTOFinanciera>>() {})
+                    .block();
+                objRespuesta.setObjAreaFinanciera(objRespuestaFinanciera);
+                if(objRespuestaFinanciera.isPazYSalvo()) pazSalvoFinanciera = true;
+
+                //Llamada al 3er Servicio: Laboratorios
+                String urlServicioLaboratorios = "http://localhost:5003/api/laboratorio/pazsalvo";
+                RespuestaPazSalvoDTOArea<PrestamoDTOLaboratorio> objRespuestaLaboratorios = webClient.post()
+                    .uri(urlServicioLaboratorios)
+                    .bodyValue(objPeticion)
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<RespuestaPazSalvoDTOArea<PrestamoDTOLaboratorio>>() {})
+                    .block();
+                objRespuesta.setObjAreaLaboratorios(objRespuestaLaboratorios);
+                if(objRespuestaLaboratorios.isPazYSalvo()) pazSalvoLaboratorios = true;
+
+                exito = true; // Si todo salió bien, salimos del ciclo
+            }
+            catch (Exception e) {
+                intentos++;
+                contadorFallos.siguienteIntento(); // Lleva el conteo global de fallos
+                System.out.println("Intento " + intentos + " fallido: " + e.getMessage());
+                if (intentos >= MAX_INTENTOS) {
+                    objRespuesta.setMensaje("Error al obtener el estado de paz y salvo tras varios intentos.");
+                    return objRespuesta;
+                }
+                try { Thread.sleep(1000); } catch (InterruptedException ie) { }
+            }
         }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-            objRespuesta.setMensaje("Error al obtener el estado de paz y salvo");            
-        }
+
         // Verificar si el estudiante está a paz y salvo
         if(pazSalvoDeportes && pazSalvoFinanciera && pazSalvoLaboratorios){
             objRespuesta.setPazSalvo(true);
             objRespuesta.setMensaje("El estudiante está a paz y salvo en todas las áreas.");
-            // Notificar a todos los admins de la solicitud
             adminWebSocketClient.notificar(
                 "/notificaciones/generales",
                 Map.of("contenido", "El estudiante " + objPeticion.getNombreEstudiante() + " se encuentra en paz y salvo en todas las areas.")
             );
-            // Notificar a cada área que el estudiante está a paz y salvo en su área
             adminWebSocketClient.notificar(
                 "/notificaciones/deportes",
                 Map.of("contenido", "El estudiante " + objPeticion.getNombreEstudiante() + " está a paz y salvo en Deportes.")
@@ -112,7 +124,6 @@ public class PazYSalvoServiceImpl implements IPazYSalvoService {
             StringBuilder mensaje = new StringBuilder("El estudiante no está a paz y salvo en las siguientes áreas:");
             if (!pazSalvoDeportes){
                 mensaje.append(" Deportes");
-                //Enviar mensaje a WebSocket al administrador de deportes
                 adminWebSocketClient.notificar(
                     "/notificaciones/deportes",
                     Map.of(
@@ -123,7 +134,6 @@ public class PazYSalvoServiceImpl implements IPazYSalvoService {
             }             
             if (!pazSalvoFinanciera) {
                 mensaje.append(" Financiera");
-                //Enviar mensaje a WebSocket al administrador financiero
                 adminWebSocketClient.notificar(
                     "/notificaciones/financiera",
                     Map.of(
@@ -134,7 +144,6 @@ public class PazYSalvoServiceImpl implements IPazYSalvoService {
             }
             if (!pazSalvoLaboratorios) {
                 mensaje.append(" Laboratorios");
-                //Enviar mensaje a WebSocket al administrador de laboratorios
                 adminWebSocketClient.notificar(
                     "/notificaciones/laboratorios",
                     Map.of(
@@ -163,27 +172,36 @@ public class PazYSalvoServiceImpl implements IPazYSalvoService {
             .uri(urlServicioDeportes)
             .bodyValue(objPeticion)
             .retrieve()
-            //La respuesta de cada area siempre es la misma, solo cambia el tipo de deuda o prestamo
             .bodyToMono(new ParameterizedTypeReference<RespuestaPazSalvoDTOArea<PrestamoDTODeportes>>() {})
-            .doOnError(e -> System.out.println("Error al consultar paz y salvo en Deportes: " + e.getMessage()));
+            .doOnError(e -> {
+                System.out.println("Error al consultar paz y salvo en Deportes: " + e.getMessage());
+                contadorFallos.siguienteIntento();
+            })
+            .retry(2); // 2 reintentos adicionales (total 3 intentos)
         //Llamada al 2do Servicio: Financiera
         String urlServicioFinanciera = "http://localhost:5002/api/financiera/pazsalvo";
         Mono<RespuestaPazSalvoDTOArea<DeudaDTOFinanciera>> objRespuestaFinanciera = webClient.post()
             .uri(urlServicioFinanciera)
             .bodyValue(objPeticion)
             .retrieve()
-            //La respuesta de cada area siempre es la misma, solo cambia el tipo de deuda o prestamo
             .bodyToMono(new ParameterizedTypeReference<RespuestaPazSalvoDTOArea<DeudaDTOFinanciera>>() {})
-            .doOnError(e -> System.out.println("Error al consultar paz y salvo en Financiera: " + e.getMessage()));                        
+            .doOnError(e -> {
+                System.out.println("Error al consultar paz y salvo en Financiera: " + e.getMessage());
+                contadorFallos.siguienteIntento();
+            })
+            .retry(2);
         //Llamada al 3er Servicio: Laboratorios
         String urlServicioLaboratorios = "http://localhost:5003/api/laboratorio/pazsalvo";
         Mono<RespuestaPazSalvoDTOArea<PrestamoDTOLaboratorio>> objRespuestaLaboratorios = webClient.post()
             .uri(urlServicioLaboratorios)
             .bodyValue(objPeticion)
             .retrieve()
-            //La respuesta de cada area siempre es la misma, solo cambia el tipo de deuda o prestamo
             .bodyToMono(new ParameterizedTypeReference<RespuestaPazSalvoDTOArea<PrestamoDTOLaboratorio>>() {})
-            .doOnError(e -> System.out.println("Error al consultar paz y salvo en Laboratorios: " + e.getMessage()));
+            .doOnError(e -> {
+                System.out.println("Error al consultar paz y salvo en Laboratorios: " + e.getMessage());
+                contadorFallos.siguienteIntento();
+            })
+            .retry(2);
         // Esperar a que todas las respuestas se completen
         Mono.zip(objRespuestaDeportes, objRespuestaFinanciera, objRespuestaLaboratorios)
             .doOnNext(tuple -> {
