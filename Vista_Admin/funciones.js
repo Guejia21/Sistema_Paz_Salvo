@@ -117,7 +117,7 @@ function suscripcionAChat(frame) {
   // Suscripción al canal personalizado del administrador
   clienteAdmin.subscribe(`/notificaciones/${areaSeleccionada}`, recibirNotificacion);
 }
-function recibirNotificacion(message) {
+function recibirNotificacion(message) {  
   const data = JSON.parse(message.body);
   console.log("Datos recibidos por WebSocket:", data); 
   const referenciaDivNotificaciones = document.getElementById('listaNotificaciones');
@@ -126,6 +126,6 @@ function recibirNotificacion(message) {
     return;
   }
   const nuevoParrafo = document.createElement('li');
-  nuevoParrafo.textContent = data.contenido;
+  nuevoParrafo.textContent = data;
   referenciaDivNotificaciones.appendChild(nuevoParrafo);
 }
